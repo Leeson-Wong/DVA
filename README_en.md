@@ -1,7 +1,10 @@
-# DVA — Dimensional Variance Analysis
+<p align="center">
+  <img src="docs/logo.svg" width="180" alt="DVA Logo">
+</p>
 
-> 同变的归一，异变的拆开。
-> *Internalize what changes together, externalize what doesn't.*
+<h1 align="center">DVA — Dimensional Variance Analysis</h1>
+
+<p align="center"><em>Internalize what changes together, externalize what doesn't.</em></p>
 
 A software design analysis framework. One question before you write code: **should this logic live inside the entity, or be split out?**
 

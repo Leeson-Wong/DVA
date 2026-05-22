@@ -1,6 +1,10 @@
-# DVA
+<p align="center">
+  <img src="docs/logo.svg" width="180" alt="DVA Logo">
+</p>
 
-> 变维识别与分析 / Dimensional Variance Analysis
+<h1 align="center">DVA</h1>
+
+<p align="center">变维识别与分析 / Dimensional Variance Analysis</p>
 >
 > 同变的归一，异变的拆开。
 

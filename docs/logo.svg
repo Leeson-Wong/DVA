@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="#0f172a"/>
+
+  <!-- Three entity nodes representing dimensions -->
+  <circle cx="160" cy="180" r="36" fill="none" stroke="#3b82f6" stroke-width="3"/>
+  <circle cx="352" cy="180" r="36" fill="none" stroke="#3b82f6" stroke-width="3"/>
+  <circle cx="256" cy="330" r="36" fill="none" stroke="#3b82f6" stroke-width="3"/>
+
+  <!-- Inner dots (state) -->
+  <circle cx="160" cy="180" r="8" fill="#3b82f6"/>
+  <circle cx="352" cy="180" r="8" fill="#3b82f6"/>
+  <circle cx="256" cy="330" r="8" fill="#3b82f6"/>
+
+  <!-- Relation edges -->
+  <line x1="196" y1="180" x2="316" y2="180" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="8 4"/>
+  <line x1="178" y1="210" x2="238" y2="300" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="8 4"/>
+  <line x1="334" y1="210" x2="274" y2="300" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="8 4"/>
+
+  <!-- Split indicator: one edge diverging -->
+  <path d="M 256 155 L 256 125" stroke="#22c55e" stroke-width="2.5"/>
+  <path d="M 256 125 L 220 95" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 256 125 L 292 95" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="220" cy="95" r="5" fill="#22c55e"/>
+  <circle cx="292" cy="95" r="5" fill="#22c55e"/>
+
+  <!-- DVA text -->
+  <text x="256" y="435" text-anchor="middle" font-size="72" font-weight="800" fill="#f8fafc" letter-spacing="12">DVA</text>
+
+  <!-- Subtitle -->
+  <text x="256" y="468" text-anchor="middle" font-size="14" fill="#94a3b8" letter-spacing="3">DIMENSIONAL VARIANCE ANALYSIS</text>
+</svg>
