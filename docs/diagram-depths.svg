@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="640" height="300" fill="#f8fafc" rx="12"/>
+
+  <!-- Title -->
+  <text x="320" y="36" text-anchor="middle" font-size="18" font-weight="700" fill="#1e293b">三个深度</text>
+
+  <!-- Quick Scan -->
+  <rect x="30" y="65" width="170" height="130" rx="10" fill="#ecfdf5" stroke="#22c55e" stroke-width="2"/>
+  <text x="115" y="95" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">快扫</text>
+  <text x="115" y="113" text-anchor="middle" font-size="11" fill="#22c55e">Quick Scan</text>
+  <text x="115" y="140" text-anchor="middle" font-size="24" font-weight="700" fill="#15803d">30s</text>
+  <text x="115" y="165" text-anchor="middle" font-size="11" fill="#64748b">写任何代码之前</text>
+  <text x="115" y="182" text-anchor="middle" font-size="11" fill="#94a3b8">覆盖 80% 场景</text>
+
+  <!-- Standard Analysis -->
+  <rect x="230" y="65" width="180" height="130" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="320" y="95" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">标准分析</text>
+  <text x="320" y="113" text-anchor="middle" font-size="11" fill="#3b82f6">Standard Analysis</text>
+  <text x="320" y="140" text-anchor="middle" font-size="24" font-weight="700" fill="#1e40af">2min</text>
+  <text x="320" y="165" text-anchor="middle" font-size="11" fill="#64748b">新功能 / 新模块</text>
+  <text x="320" y="182" text-anchor="middle" font-size="11" fill="#94a3b8">找实体，标热点</text>
+
+  <!-- Full Analysis -->
+  <rect x="440" y="65" width="170" height="130" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="525" y="95" text-anchor="middle" font-size="15" font-weight="700" fill="#92400e">完整分析</text>
+  <text x="525" y="113" text-anchor="middle" font-size="11" fill="#d97706">Full Analysis</text>
+  <text x="525" y="140" text-anchor="middle" font-size="24" font-weight="700" fill="#92400e">15min</text>
+  <text x="525" y="165" text-anchor="middle" font-size="11" fill="#64748b">新项目 / 重大重构</text>
+  <text x="525" y="182" text-anchor="middle" font-size="11" fill="#94a3b8">完整五步流程</text>
+
+  <!-- Upgrade arrows -->
+  <line x1="200" y1="130" x2="228" y2="130" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="410" y1="130" x2="438" y2="130" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Upgrade labels -->
+  <text x="214" y="120" text-anchor="middle" font-size="9" fill="#94a3b8">升级</text>
+  <text x="424" y="120" text-anchor="middle" font-size="9" fill="#94a3b8">升级</text>
+
+  <!-- Bottom note -->
+  <rect x="130" y="225" width="380" height="55" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="320" y="250" text-anchor="middle" font-size="13" fill="#475569">默认快扫。发现问题了再升级。</text>
+  <text x="320" y="270" text-anchor="middle" font-size="12" fill="#94a3b8">不要每次都做完整分析。大多数时候快扫就够。</text>
+</svg>
