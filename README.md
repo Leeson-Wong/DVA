@@ -33,9 +33,9 @@ Most of the time, a quick scan is enough. Don't do full analysis every time.
 
 ### For humans
 
-Read [DVA.md](docs/DVA.md) — complete framework description with examples, verification steps, and design pattern derivation.
+Read [变维拆分.md](变维拆分.md) — complete framework description (Chinese, original).
 
-Chinese version: [变维拆分.md](变维拆分.md)
+English translation: [docs/DVA.md](docs/DVA.md)
 
 ### For AI Agents
 
