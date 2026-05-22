@@ -1,55 +1,55 @@
 ---
 name: change-dim-scan
-description: "快扫：30 秒 DVA 分析。问一个问题——'这里什么会变？'，判断变化速率是否对齐，不对齐的留口子。"
+description: "Quick Scan: 30-second DVA analysis. Ask one question — 'what will change here?' — judge if change rates are aligned, leave hooks where they aren't."
 ---
 
-# 快扫 — 30 秒 DVA 分析
+# Quick Scan — 30-Second DVA Analysis
 
-**覆盖 80% 的场景。** 写代码之前闪一下就够了。
+**Covers 80% of scenarios.** A flash of thought before writing code is all it takes.
 
-## 怎么做
+## How
 
-问自己一个问题：**"这里什么会变？"**
+Ask yourself one question: **"What will change here?"**
 
-然后用业务语言判断：
+Then judge in business language:
 
-| 怎么问自己 | 例子 |
-|-----------|------|
-| "做法经常换吗？" | 运费规则每月调、折扣算法经常改 |
-| "谁来做这件事会换吗？" | 接入新的支付渠道、换物流供应商 |
-| "东西会越来越多吗？" | 商品品类从 10 个扩到 100 个 |
-| "步骤和顺序经常调吗？" | 审批流程从 3 步变 5 步 |
-| "调用方式会变吗？" | 从 REST 迁移到 gRPC |
-| "业务规则经常改吗？" | 优惠券门槛调整、会员等级规则变更 |
+| Question to ask yourself | Example |
+|--------------------------|---------|
+| "Will the approach change often?" | Shipping rules adjusted monthly, discount algorithms frequently revised |
+| "Will who does it change?" | Integrating a new payment provider, switching logistics vendors |
+| "Will things keep multiplying?" | Product categories growing from 10 to 100 |
+| "Will steps or order change?" | Approval flow going from 3 steps to 5 |
+| "Will the interface change?" | Migrating from REST to gRPC |
+| "Will business rules change often?" | Coupon threshold adjustments, membership tier rule changes |
 
-每找到一个变化点，快速判断：**这个变化的节奏和实体本身一样吗？**
-- 一样 → 不用管，内化在实体里就行
-- 不一样 → **留口子**（做成配置、回调、或参数）
+For each change point, quickly judge: **does this change at the same pace as the entity?**
+- Same pace → leave it alone, internalize in the entity
+- Different pace → **leave a hook** (make it configurable, a callback, or a parameter)
 
-**想完就写代码。** 不需要填表，不需要写文档。
+**Done thinking? Write code.** No tables to fill, no documents to write.
 
-## 示例
+## Example
 
-> 要写一个邮件发送功能。
+> Building an email sending feature.
 >
-> 快扫：收件人地址会变、邮件模板会变、发送渠道可能会换。
+> Quick scan: recipient addresses will change, email templates will change, sending channel might switch.
 >
-> 判断：收件人和模板跟着邮件实体走，内化。发送渠道（SMTP / API）变化节奏独立，外化成可配置的。
+> Judgment: recipient and template follow the email entity — internalize. Sending channel (SMTP / API) has an independent change rate — externalize as configurable.
 >
-> 记住这个判断 → 写代码。
+> Remember this judgment → write code.
 
-## Anti-Pattern
+## Anti-Patterns
 
-- **想太多。** 快扫就是闪一下。超过 30 秒说明该升级到标准分析了。
-- **想完不留口子。** 知道变化速率不对齐但代码写死了，等于没扫。
-- **什么都做可配置。** 变化速率对齐的东西不要过度抽象。
+- **Overthinking.** Quick scan is a flash of thought. If it takes more than 30 seconds, you should upgrade to Standard Analysis.
+- **Scanning but not leaving hooks.** Identifying misaligned change rates but hard-coding them anyway is the same as not scanning.
+- **Making everything configurable.** Don't over-abstract things with aligned change rates.
 
-## 什么时候升级
+## When to Upgrade
 
-快扫时发现以下任一情况，升级到 `change-dim-split`（标准分析）：
+Upgrade to `change-dim-split` (Standard Analysis) if Quick Scan reveals any of these:
 
-- 变化速率不对齐的地方超过 3 个
-- 涉及多个实体
-- 不确定变化之间是否相互影响
-- 改的是已经有问题的旧代码
-- **要改的东西在系统中有多处副本**（同名字段出现在多个模块/层/服务中）→ 至少标准分析，否则会漏副本
+- More than 3 misaligned change rates
+- Multiple entities involved
+- Uncertainty about whether changes affect each other
+- The code being modified already has quality issues
+- **The thing you're changing has multiple copies in the system** (same-named field appears across modules/layers/services) — use at least Standard Analysis, otherwise you'll miss copies

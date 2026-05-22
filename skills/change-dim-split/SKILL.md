@@ -1,164 +1,164 @@
 ---
 name: change-dim-split
-description: "DVA 分析。标准分析（2分钟）或完整分析（15分钟）：识别实体和关系，按变化速率对齐性决定内化或外化，选最轻量手段。"
+description: "DVA analysis. Standard (2 min) or Full (15 min): identify entities and relations, decide internalize or externalize by change rate alignment, pick the lightest tool."
 ---
 
-# DVA — 标准分析 & 完整分析
+# DVA — Standard Analysis & Full Analysis
 
-**同变的归一，异变的拆开。**
+**Internalize what changes together, externalize what doesn't.**
 
-## 两个基元
+## Two Primitives
 
-- **实体（节点）**：持有状态，可以有简单的自述行为
-- **关系（边）**：连接实体，系统的复杂行为都在关系上运转
+- **Entity (node)**: holds state, may have simple self-describing behavior
+- **Relation (edge)**: connects entities; complex system behavior runs on relations
 
-核心决策：**行为的住所。** 变化速率对齐的内化进实体，不对齐的外化出去。
+Core decision: **where does behavior live?** Aligned change rates internalize into entities; misaligned ones externalize out.
 
-## 两个模式
+## Two Modes
 
-### 标准分析（2 分钟）
+### Standard Analysis (2 minutes)
 
-在心里过三步，不需要填表：
+Run three steps mentally — no need to fill tables:
 
-1. **找到实体和关系**：这个功能涉及哪些实体？它们之间怎么连接？
-2. **标注变化热点**：哪条关系的变化节奏和实体不对齐？
-3. **决策**：不对齐的关系准备外化。从最轻的手段开始选。
+1. **Find entities and relations**: What entities does this feature involve? How do they connect?
+2. **Mark change hotspots**: Which relation changes at a different pace than its entity?
+3. **Decide**: Plan to externalize misaligned relations. Start with the lightest tool.
 
-在心里标完就写代码。
+Done marking? Write code.
 
-### 完整分析（10-15 分钟）
+### Full Analysis (10-15 minutes)
 
-系统已经乱到改一处崩三处，或者新项目启动。需要走完整五步流程。
-
----
-
-## 完整流程
-
-### 第一步：识别实体和关系
-
-列出系统涉及的所有实体和它们之间的关系。
-
-示例——电商订单系统：
-
-| 实体 | 关系 | 关系在做什么 |
-|------|------|------------|
-| 订单 | — 计算运费 → | 运费规则 |
-| 订单 | — 状态流转 → | 状态机 |
-| 订单 | — 调用支付 → | 支付渠道 |
-| 订单 | — 同步库存 → | 库存系统 |
-| 订单 | — 包含 → | 订单项 |
-
-### 第二步：标注变化速率
-
-对每条关系标注变化速率和趋势：
-
-| 关系 | 速率 | 趋势 |
-|------|------|------|
-| 订单 → 运费规则 | 高频 | 震荡 |
-| 订单 → 状态机 | 低频 | 稳定 |
-| 订单 → 支付渠道 | 中频 | 增长 |
-| 订单 → 库存系统 | 高频 | 震荡 |
-| 订单 → 订单项 | 低频 | 稳定 |
-
-### 第二步半：查现有
-
-**在新建任何东西之前，先查现有代码。** 对每条速率不对齐的关系，问：
-
-> 现有代码中是否已有接口、抽象层、或配置机制覆盖了这个变化速率？
-
-- 如果有，且覆盖了当前需求 → **跳过，不新建**。在变维分析表里标注"已有外化，无需新增"。
-- 如果有，但不够 → 评估是扩展现有的还是新建。优先扩展。
-- 如果没有 → 进入第三步分组，准备新建。
-
-**这是防止过度设计的关键步骤。** 变维分析的价值不只是"告诉你怎么拆"，也包括"告诉你不需要拆"。
-
-### 第三步：按变化速率分组
-
-**速率和趋势一致的归在一起，不一致的拆开。**
-
-- **订单骨架**：订单实体 + 订单项 + 状态流转 → 速率低、稳定 → 归在一起，内化
-- **运费策略**：运费规则 → 高频、震荡 → 从骨架拆出来，外化
-- **支付适配**：支付渠道 → 中频、增长 → 单独一组，外化
-- **库存同步**：库存数据 → 高频、震荡 → 单独一组，外化
-
-### 第四步：选外化手段
-
-每个需要外化的关系，**从轻到重选**：
-
-| 关系的变化特征 | 最轻的手段 | 更重的手段 |
-|--------------|-----------|-----------|
-| 一个值经常变 | 配置文件 / 环境变量 | — |
-| 一段逻辑经常换 | 回调 / 函数参数 | Strategy 模式 |
-| 规则经常增减 | 数据表 / JSON 配置 | 规则引擎 |
-| 实现经常换，接口不变 | 抽一层接口 | Bridge 模式 |
-| 新类型不断出现 | 注册表 | Factory 模式 |
-| 内部复杂，对外要简单 | 包一层函数 | Facade 模式 |
-| 层级会加深 | 统一接口，递归组合 | Composite 模式 |
-| 流程步骤经常调 | 管道 / 中间件链 | Chain of Responsibility |
-| 操作要能撤销 | 记录操作对象 | Command 模式 |
-
-**原则：能用配置文件解决的，不写 Strategy。能加一层函数解决的，不建类层次。重锤只在必要的时候用。**
-
-**新建前必答：每个拟新建的文件、接口、类，必须回答"为什么现有的不行"。答不上来的，不新建。**
-
-### 第五步：验证
-
-**第一轮：挡没挡住（保当下）** — 必须全过
-
-1. **功能可用**：需求变了，改一个地方就能跟上吗？
-2. **稳定性**：改了 A 不会崩 B 吗？
-3. **鲁棒性**：来了意料之外的变化，能兜住吗？
-
-**第二轮：挡住之后怎么样（保未来）** — 按项目阶段取舍
-
-4. **隔离性**：改这个模块，需要动其他模块吗？
-5. **可演进性**：三个月后需求大改，能接着迭代还是得重写？
-6. **可维护性**：半年后看这段代码，还看得懂吗？
-7. **可测试性**：改了之后，能快速验证没改坏吗？
-
-原型期第二轮可以放宽松，生产系统必须全过。
+The system is so tangled that changing one thing breaks three others, or it's a new project. Full five-step process needed.
 
 ---
 
-## Anti-Pattern
+## Full Process
 
-- **默认上 DDD。** 变维分析做完不一定用领域模型。配置文件、回调、数据驱动都是合法手段。不要用大炮打蚊子。
-- **分析完不落地。** 想清楚了该外化的地方不外化，等于白想。
-- **追求完美拆分。** 没有绝对完美的边界。挡住当下的变化就够了，未来的变化等来了再拆。
-- **为假设的未来做设计。** "万一以后要加 XX" — 等真加了再说。YAGNI。
-- **把不变的东西也外化。** 变化速率对齐的关系不要硬拆，内化在实体里更清晰。
+### Step 1: Identify Entities and Relations
 
-## 关键原则
+List all entities and their relationships in the system.
 
-- **同变的归一，异变的拆开** — 速率和趋势一致的内化，不一致的外化
-- **最轻量手段优先** — 配置 > 回调 > 数据驱动 > 接口抽象 > 设计模式
-- **保当下优先于保未来** — 第一轮验证必须全过，第二轮按阶段取舍
-- **不要预设路线** — 变维分析是上游步骤，分析完再从工具箱里选工具
+Example — e-commerce order system:
 
-## 设计模式 = 关系外化的标准拓扑
+| Entity | Relation | What the relation does |
+|--------|----------|----------------------|
+| Order | — calculates shipping → | Shipping rules |
+| Order | — state transitions → | State machine |
+| Order | — calls payment → | Payment provider |
+| Order | — syncs inventory → | Inventory system |
+| Order | — contains → | Order items |
 
-大部分设计模式是关系外化后产生的标准拓扑形状：
+### Step 2: Annotate Change Rates
 
-| 关系的什么在变 | 外化后的拓扑 | 对应的模式 |
-|-------------|-----------|-----------|
-| 谁来做 | 星形（委派给可替换的叶节点） | Strategy / State / Visitor |
-| 怎么创建 | 三角（消费者→工厂→产品） | Factory / Builder / Prototype |
-| 谁被通知 | 辐射（中心扇出到订阅者） | Observer / Mediator |
-| 什么时候做 | 瞬时边→持久节点 | Command / Memento |
-| 怎么连 | 插入中间节点 | Facade / Adapter / Bridge / Proxy / Decorator |
-| 一个还是多个 | 树形（递归组合） | Composite / Iterator |
-| 按什么顺序 | 链式（沿链传递） | Template Method / Chain of Responsibility |
+For each relation, annotate its change rate and trend:
 
-不是所有模式都纯粹是外化（Singleton 管约束，Flyweight 管内存，Interpreter 管语法）。但大部分模式可以从"关系的什么在变"推导出来。
+| Relation | Rate | Trend |
+|----------|------|-------|
+| Order → Shipping rules | High | Oscillating |
+| Order → State machine | Low | Stable |
+| Order → Payment provider | Medium | Growing |
+| Order → Inventory system | High | Oscillating |
+| Order → Order items | Low | Stable |
 
-## 名词
+### Step 2.5: Check Existing Code
 
-| 术语 | 含义 |
-|------|------|
-| 实体 | 持有状态的节点 |
-| 关系 | 连接实体的边，系统的行为在关系上运转 |
-| 内化 | 关系收敛进实体，实体变充血 |
-| 外化 | 关系从实体剥离，变成独立实体或配置 |
-| 变化速率对齐 | 行为的变化节奏和实体本身是否同步 |
-| 原子 | 变化速率一致的最小单元 |
-| 变维拆分 | 把变化速率不一致的关系沿边界分开 |
+**Before creating anything new, check what already exists.** For each misaligned relation, ask:
+
+> Does existing code already have an interface, abstraction layer, or configuration mechanism covering this rate of change?
+
+- Yes, and it covers the current need → **skip, don't create**. Note "already externalized, no new work needed."
+- Yes, but insufficient → evaluate extending the existing one vs. creating new. Prefer extending.
+- No → proceed to Step 3, prepare to create.
+
+**This is the critical step to prevent over-engineering.** DVA's value isn't just "telling you how to split" — it also tells you "you don't need to split."
+
+### Step 3: Group by Change Rate
+
+**Group together what shares the same rate and trend; separate what doesn't.**
+
+- **Order backbone**: Order entity + Order items + State transitions → low rate, stable → group together, internalize
+- **Shipping strategy**: Shipping rules → high rate, oscillating → split from backbone, externalize
+- **Payment adapter**: Payment provider → medium rate, growing → separate group, externalize, will keep expanding
+- **Inventory sync**: Inventory data → high rate, oscillating → separate group, externalize, independent changes
+
+### Step 4: Pick Externalization Tools
+
+For each relation that needs externalization, **pick from lightest to heaviest**:
+
+| What changes in the relation | Lightest tool | Heavier tool |
+|-----------------------------|---------------|-------------|
+| A value changes often | Config file / env variable | — |
+| A piece of logic swaps often | Callback / function parameter | Strategy pattern |
+| Rules grow and shrink | Data table / JSON config | Rule engine |
+| Implementation swaps, interface stays | Abstract an interface | Bridge pattern |
+| New types keep appearing | Registry | Factory pattern |
+| Internal complexity, external simplicity | Wrap in a function | Facade pattern |
+| Hierarchy deepens | Uniform interface, recursive composition | Composite pattern |
+| Process steps adjust often | Pipeline / middleware chain | Chain of Responsibility |
+| Operations need undo | Record the operation object | Command pattern |
+
+**Principle: if a config file solves it, don't write a Strategy. If a wrapper function solves it, don't build a class hierarchy. Use the heavy hammer only when necessary.**
+
+**Must-answer before creating: every proposed new file, interface, or class must answer "why don't existing ones work?" If you can't answer, don't create it.**
+
+### Step 5: Verify
+
+**Round 1: Did it hold? (Protect the present)** — must pass all
+
+1. **Functional**: When requirements change, can you adapt by changing one place?
+2. **Stability**: Does changing A break B?
+3. **Robustness**: Can it handle unexpected changes?
+
+**Round 2: How well did it hold? (Protect the future)** — calibrate by project stage
+
+4. **Isolation**: Does modifying this module require touching others?
+5. **Evolvability**: After major requirement changes in 3 months, can you iterate or must you rewrite?
+6. **Maintainability**: Can you understand this code 6 months from now?
+7. **Testability**: After changes, can you quickly verify nothing broke?
+
+Relax Round 2 for prototypes; production systems must pass all.
+
+---
+
+## Anti-Patterns
+
+- **Defaulting to DDD.** DVA analysis doesn't always lead to domain models. Config files, callbacks, data-driven approaches are all valid. Don't use a sledgehammer to crack a nut.
+- **Analyzing but not implementing.** Identifying what to externalize but not doing it is wasted analysis.
+- **Chasing perfect boundaries.** No boundary is perfect. Holding against current changes is enough; future changes can be handled when they arrive.
+- **Designing for hypothetical futures.** "What if we need to add X later" — wait until you actually do. YAGNI.
+- **Externalizing what doesn't change differently.** Don't force-split relations with aligned change rates; internalizing them keeps things clearer.
+
+## Key Principles
+
+- **Internalize what changes together, externalize what doesn't** — same rate and trend → internalize; different → externalize
+- **Lightest tool first** — config > callback > data-driven > interface abstraction > design pattern
+- **Present over future** — Round 1 verification must pass; Round 2 is calibrated by project stage
+- **Don't preset the path** — DVA is an upstream step; analyze first, then pick from the toolbox
+
+## Design Patterns = Standard Topologies of Relation Externalization
+
+Most design patterns are standard topological shapes produced by externalizing relations:
+
+| What changes in the relation | Topology after externalization | Corresponding pattern |
+|-----------------------------|-------------------------------|-----------------------|
+| Who does it | Star (delegates to swappable leaves) | Strategy / State / Visitor |
+| How to create | Triangle (consumer → factory → product) | Factory / Builder / Prototype |
+| Who gets notified | Broadcast (fan-out from center to subscribers) | Observer / Mediator |
+| When to do it | Transient edge → persistent node | Command / Memento |
+| How to connect | Insert middle node for translation or simplification | Facade / Adapter / Bridge / Proxy / Decorator |
+| One or many | Tree (recursive composition, uniform interface) | Composite / Iterator |
+| In what order | Chain (pass along the chain) | Template Method / Chain of Responsibility |
+
+Not all patterns are purely about externalization (Singleton manages instance constraints, Flyweight manages memory, Interpreter manages syntax). But most patterns can be derived from "what changes in the relation."
+
+## Glossary
+
+| Term | Meaning |
+|------|---------|
+| Entity | A node that holds state |
+| Relation | An edge connecting entities; system behavior runs on relations |
+| Internalize | Relation converges into the entity; entity becomes richer |
+| Externalize | Relation splits from the entity, becoming an independent entity or configuration |
+| Change rate alignment | Whether behavior changes at the same pace as the entity itself |
+| Atom | The smallest unit with consistent change rates |
+| DVA (Dimensional Variance Analysis) | Splitting relations with inconsistent change rates along their boundaries |

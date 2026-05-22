@@ -1,111 +1,218 @@
-# DVA — Dimensional Variance Analysis
+# 变维拆分
 
 > 同变的归一，异变的拆开。
-> *Internalize what changes together, externalize what doesn't.*
 
-A software design analysis framework. One question before you write code: **should this logic live inside the entity, or be split out?**
+## 这是什么
 
-The criterion is simple — is the rate of change aligned?
+变维拆分是一个软件设计分析工具。帮你在写代码之前想清楚：**需求变了，你的代码只改一个地方就能跟上，而不是牵一发动全身。**
 
-## Core Idea
+不需要懂设计模式，不需要懂架构。只需要理解两个东西。
 
-Any software system has exactly two things:
+## 两个基元
 
-- **Entities (nodes)**: hold state
-- **Relations (edges)**: connect entities; complex behavior runs on relations
+任何软件系统，归根结底只有两种东西：
 
-The core design decision: **where does behavior live?**
+- **实体（节点）**：持有状态。可以有简单的自述行为（只碰自己的数据），也可以完全没有行为。
+- **关系（边）**：连接实体。系统的复杂行为，本质上都是关系在运转。
 
-- Change rate matches entity → **Internalize** (keep inside)
-- Change rate diverges from entity → **Externalize** (split out)
+设计的核心决策只有一个：**行为的住所。** 一段逻辑该住在实体内部，还是该住到外面去？
 
-## Three Depths
+判据是**变化速率是否对齐**：
 
-| Depth | Time | When to use |
-|-------|------|-------------|
-| Quick Scan | 30 seconds | Before writing any code |
-| Standard Analysis | 2 minutes | New features / new modules |
-| Full Analysis | 10-15 minutes | New projects / major refactors |
+- 这段逻辑的变化节奏和实体本身一样吗？ → **内化**（收进实体）
+- 不一样，甚至经常冲突？ → **外化**（拆出去，变成独立实体或外部配置）
 
-Most of the time, a quick scan is enough. Don't do full analysis every time.
+举例：
+- `totalPrice = sum(items.price)` — 简单求和，和订单同生共死 → **内化**进 Order 实体
+- 运费计算规则每月调，订单结构半年不动 → 变化节奏不对齐 → 必须**外化**
 
-## Quick Start
+## 怎么用
 
-### For humans
+变维拆分不是每次都要走完整流程。按场景选深度：
 
-Read [变维拆分.md](变维拆分.md) — complete framework description (Chinese, original).
+### 快扫（30 秒）
 
-English translation: [docs/DVA.md](docs/DVA.md)
+**什么时候用：** 写任何代码之前。覆盖 80% 的场景。
 
-### For AI Agents
+**怎么做：** 问自己——"这里什么会变？"
 
-Skills ready for Claude Code / Gemini:
+| 怎么问自己 | 例子 |
+|-----------|------|
+| "做法经常换吗？" | 运费规则每月调、折扣算法经常改 |
+| "谁来做这件事会换吗？" | 接入新的支付渠道、换物流供应商 |
+| "东西会越来越多吗？" | 商品品类从 10 个扩到 100 个 |
+| "步骤和顺序经常调吗？" | 审批流程从 3 步变 5 步 |
+| "调用方式会变吗？" | 从 REST 迁移到 gRPC |
+| "业务规则经常改吗？" | 优惠券门槛调整、会员等级规则变更 |
+
+有答案 → 变化速率可能不对齐，写代码时在那个地方留口子。
+没答案 → 不用管，直接写。
+
+**示例：**
+> 要写一个邮件发送功能。快扫：收件人地址会变、邮件模板会变、发送渠道可能会换。记住这三点，写代码时自然会把它们做成可配置的。
+
+### 标准分析（2 分钟）
+
+**什么时候用：** 新功能、新模块、改有问题的旧模块。
+
+**怎么做：** 三步走，不需要写文档。
+
+1. **找到实体和关系**：这个功能涉及哪些实体？它们之间怎么连接？
+2. **标注变化热点**：哪条关系的变化节奏和实体不对齐？
+3. **决策**：不对齐的关系准备外化。从最轻的手段开始选。
+
+在心里标完就写代码。
+
+### 完整分析（10-15 分钟）
+
+**什么时候用：** 新项目启动、重大重构、系统已经改一处崩三处。
+
+**怎么做：** 完整走以下流程。建议把变谱表写下来，方便后续对照。
+
+#### 第一步：识别实体和关系
+
+列出系统涉及的所有实体和它们之间的关系。
+
+示例——电商订单系统：
+
+| 实体 | 关系 | 关系在做什么 |
+|------|------|------------|
+| 订单 | — 计算运费 → | 运费规则 |
+| 订单 | — 状态流转 → | 状态机 |
+| 订单 | — 调用支付 → | 支付渠道 |
+| 订单 | — 同步库存 → | 库存系统 |
+| 订单 | — 包含 → | 订单项 |
+
+#### 第二步：标注变化速率
+
+对每条关系标注变化速率和趋势：
+
+| 关系 | 速率 | 趋势 |
+|------|------|------|
+| 订单 → 运费规则 | 高频 | 震荡 |
+| 订单 → 状态机 | 低频 | 稳定 |
+| 订单 → 支付渠道 | 中频 | 增长 |
+| 订单 → 库存系统 | 高频 | 震荡 |
+| 订单 → 订单项 | 低频 | 稳定 |
+
+#### 第三步：按变化速率分组
+
+**速率和趋势一致的归在一起，不一致的拆开。**
+
+- **订单骨架**：订单实体 + 订单项 + 状态流转 → 速率低、稳定 → 归在一起，内化
+- **运费策略**：运费规则 → 高频、震荡 → 从骨架拆出来，外化
+- **支付适配**：支付渠道 → 中频、增长 → 单独一组，外化，会持续膨胀
+- **库存同步**：库存数据 → 高频、震荡 → 单独一组，外化，变化独立
+
+#### 第四步：选外化手段
+
+每个需要外化的关系，从最轻的开始选：
+
+| 关系的变化特征 | 最轻的手段 | 更重的手段 |
+|--------------|-----------|-----------|
+| 一个值经常变 | 配置文件 / 环境变量 | — |
+| 一段逻辑经常换 | 回调 / 函数参数 | Strategy 模式 |
+| 规则经常增减 | 数据表 / JSON 配置 | 规则引擎 |
+| 实现经常换，接口不变 | 抽一层接口 | Bridge 模式 |
+| 新类型不断出现 | 注册表 | Factory 模式 |
+| 内部复杂，对外要简单 | 包一层函数 | Facade 模式 |
+| 层级会加深 | 统一接口，递归组合 | Composite 模式 |
+| 流程步骤经常调 | 管道 / 中间件链 | Chain of Responsibility |
+| 操作要能撤销 | 记录操作对象 | Command 模式 |
+
+**原则：能用配置文件解决的，不写 Strategy。能加一层函数解决的，不建类层次。重锤只在必要的时候用。**
+
+#### 第五步：验证
+
+分两轮检查。
+
+**第一轮：挡没挡住（保当下）** — 必须全过
+
+1. **功能可用**：需求变了，改一个地方就能跟上吗？
+2. **稳定性**：改了 A 不会崩 B 吗？
+3. **鲁棒性**：来了意料之外的变化，能兜住吗？
+
+**第二轮：挡住之后怎么样（保未来）** — 按项目阶段取舍
+
+4. **隔离性**：改这个模块，需要动其他模块吗？
+5. **可演进性**：三个月后需求大改，能接着迭代还是得重写？
+6. **可维护性**：半年后看这段代码，还看得懂吗？
+7. **可测试性**：改了之后，能快速验证没改坏吗？
+
+原型期第二轮可以放宽松，生产系统必须全过。
+
+**档位之间可以升级，不用一次到位。** 先快扫开始写，写着写着发现问题了，停下来做标准分析。标准分析不够用，再上完整分析。
+
+## 设计模式和变维拆分
+
+大部分设计模式是**关系外化的标准拓扑**。当你把一条隐式的关系变成显式的、可独立变化的实体时，就自然推导出了某个设计模式。
+
+| 关系的什么在变 | 外化后的拓扑形状 | 对应的模式 |
+|-------------|--------------|-----------|
+| 谁来做 | 星形：中心委派给可替换的叶节点 | Strategy / State / Visitor |
+| 怎么创建 | 三角：消费者→工厂→产品 | Factory / Builder / Prototype |
+| 谁被通知 | 辐射：中心扇出到订阅者 | Observer / Mediator |
+| 什么时候做 | 瞬时边固化成持久节点 | Command / Memento |
+| 怎么连 | 插入中间节点做翻译或简化 | Facade / Adapter / Bridge / Proxy / Decorator |
+| 一个还是多个 | 树形：递归组合，对外统一 | Composite / Iterator |
+| 按什么顺序 | 链式：沿链传递处理 | Template Method / Chain of Responsibility |
+
+不是所有 23 个模式都纯粹是外化。Singleton 管实例数量约束，Flyweight 管内存优化，Interpreter 管语法表达——它们各有各的动机。变维拆分能解释大部分模式从何而来，但不应强行解释全部。
+
+## 和现有理论的关系
+
+变维拆分不取代任何已有方法，它是所有方法的**上游分析步骤**：
 
 ```
-skills/
-  using-dims/SKILL.md        # Entry: pick the right depth
-  change-dim-scan/SKILL.md   # Quick scan (30s)
-  change-dim-split/SKILL.md  # Standard + Full analysis
+变维拆分（分析实体、关系、变化速率）
+  ↓
+决定行为的住所（内化 or 外化）
+  ↓
+选择外化手段：
+  ├── 最轻量：配置、回调、数据驱动
+  ├── PEAA 模式：Transaction Script / Table Module / Domain Model
+  ├── GoF 设计模式：Strategy、Facade、Composite...
+  ├── DDD 战术：聚合、值对象、领域事件
+  └── 其他任何合适的手段
 ```
 
-### Prompt for any AI
+先分析，再选工具。不预设路线。
 
-> Before writing code, do a DVA analysis. Pick depth by scenario:
+## 给 AI Agent 的指令
+
+如果你用 AI 写代码（Claude、Cursor、Copilot 等），把这段话给 AI：
+
+> 写代码前做变维分析。按场景选深度：
 >
-> **Daily coding (quick scan):** Think "what will change here?" Leave hooks at unstable points. Don't over-engineer.
+> **日常编码（快扫）：** 想一下"这里什么会变"，在容易变的地方留配置口子或回调参数。不要过度设计。
 >
-> **New features (standard analysis):** Find entities and relations. Mark where change rates diverge. Isolate at those points.
+> **新功能/新模块（标准分析）：** 找到实体和关系，标注变化热点（哪条关系的变化节奏和实体不对齐），在不齐处做隔离。不要默认使用任何架构框架。
 >
-> **New projects (full analysis):** List all entities and relations. Annotate change rates and trends. Group by consistency. Pick the lightest externalization tool for each split point (config > callback > interface > design pattern).
+> **新项目/重大重构（完整分析）：** 列出所有实体和关系，标注变化速率和趋势，按一致性分组，每个拆分点从最轻量的手段开始选（配置 > 回调 > 接口 > 设计模式）。验证功能可用、稳定性、鲁棒性。
+>
+> 大多数时候快扫就够了。不要每次都做完整分析。
 
-## Design Patterns = Standard Topologies of Relation Externalization
+## 模型的边界
 
-| What changes in the relation | Topology | Corresponding pattern |
-|-----------------------------|----------|-----------------------|
-| Who does it | Star | Strategy / State / Visitor |
-| How to create | Triangle | Factory / Builder / Prototype |
-| Who gets notified | Broadcast | Observer / Mediator |
-| When to do it | Transient→Persistent | Command / Memento |
-| How to connect | Insert middle node | Facade / Adapter / Bridge / Proxy / Decorator |
-| One or many | Tree | Composite / Iterator |
-| In what order | Chain | Template Method / Chain of Responsibility |
+变维拆分用变化速率对齐作为**主要判据**，但不是唯一判据。实际设计中还需要考虑：
 
-DVA is the **upstream analysis step** for all these patterns — analyze change rates first, then pick from the toolbox.
+- **可读性**：有时外化会让代码更难读，即使变化速率不对齐也值得内化
+- **团队习惯**：团队不熟悉的模式，用了反而增加认知负担
+- **系统一致性**：与现有架构风格保持统一有时比局部最优更重要
+- **约束型模式**：Singleton、Flyweight 等解决的是约束问题，不是变化问题
 
-## Experiment Validation
+## 名词表
 
-Controlled experiments on two open-source projects (4 environments × 5 rounds × 1 model):
+| 术语 | 含义 | 一句话 |
+|------|------|--------|
+| 实体 | 持有状态的节点 | Order、User、Product |
+| 关系 | 连接实体的边，系统的行为在关系上运转 | "订单计算运费"、"订单调用支付" |
+| 内化 | 关系收敛进实体，实体变充血 | totalPrice 写在 Order 里 |
+| 外化 | 关系从实体剥离，变成独立实体或配置 | 运费计算拆成独立的 PricingService |
+| 变化速率对齐 | 行为的变化节奏和实体本身是否同步 | 对齐→内化，不对齐→外化 |
+| 原子 | 变化速率一致的最小单元 | "订单骨架"或"运费策略" |
+| 变维拆分 | 把变化速率不一致的关系沿边界分开 | "同变的归一，异变的拆开" |
 
-| Project | God Class Type | Finding |
-|---------|---------------|---------|
-| Shopizer (e-commerce) | if-else chains | DVA found comprehensive change scope; v1 over-designed, v2 corrected |
-| TEAMMATES (education) | Pure delegation façade | DVA's 22 extra files were all necessary; base missed frontend changes, producing undeployable output |
+---
 
-Detailed reports in [reports/](reports/).
-
-## Project Structure
-
-```
-├── README.md              # This file
-├── docs/
-│   └── DVA.md             # English documentation (AI-translated)
-├── 变维拆分.md             # Chinese documentation (original)
-├── CLAUDE.md              # Claude Code entry
-├── AGENTS.md              # Agents entry
-├── GEMINI.md              # Gemini entry
-├── skills/                # AI Agent skills
-│   ├── using-dims/
-│   ├── change-dim-scan/
-│   └── change-dim-split/
-└── reports/               # Experiment reports
-    ├── shopizer-experiment.md
-    └── teammates-compare.md
-```
-
-## Translation Notice
-
-English documentation (`docs/DVA.md`) is AI-translated from the Chinese original (`变维拆分.md`). If you find translation errors, please [open an issue](../../issues).
-
-## License
-
-MIT
+*软件设计不是雕琢实体，而是管理行为的住所。该内化的内化，该外化的外化，判据是变化速率是否对齐。*

@@ -1,67 +1,67 @@
 ---
 name: using-dims
-description: "DVA 入口。在写代码前判断分析深度，选择快扫、标准分析或完整分析。"
+description: "DVA entry point. Pick analysis depth before coding: quick scan, standard, or full analysis."
 ---
 
-# DVA — 入口
+# DVA — Entry
 
-写代码之前，想清楚一件事：**这段逻辑该住在实体里面，还是该拆出去？**
+Before writing code, answer one question: **should this logic live inside the entity, or be split out?**
 
-## 两个基元
+## Two Primitives
 
-- **实体（节点）**：持有状态，可以有简单的自述行为
-- **关系（边）**：连接实体，系统的复杂行为都在关系上运转
+- **Entity (node)**: holds state, may have simple self-describing behavior
+- **Relation (edge)**: connects entities; complex system behavior runs on relations
 
-## 核心判据
+## Core Criterion
 
-**变化速率是否对齐。** 一段逻辑的变化节奏和实体本身一样吗？
-- 对齐 → **内化**（收进实体）
-- 不对齐 → **外化**（拆出去）
+**Is the rate of change aligned?** Does this logic change at the same pace as the entity itself?
+- Aligned → **Internalize** (keep inside the entity)
+- Misaligned → **Externalize** (split out)
 
-## 选深度
+## Pick a Depth
 
-| 场景 | 档位 | 耗时 | 调用 |
-|------|------|------|------|
-| 写任何代码之前 | 快扫 | 30 秒 | `change-dim-scan` |
-| 新功能 / 新模块 / 改有问题的旧模块 | 标准分析 | 2 分钟 | `change-dim-split`（标准模式） |
-| 新项目启动 / 重大重构 / 系统已经改一处崩三处 | 完整分析 | 10-15 分钟 | `change-dim-split`（完整模式） |
+| Scenario | Depth | Time | Skill |
+|----------|-------|------|-------|
+| Before writing any code | Quick Scan | 30 seconds | `change-dim-scan` |
+| New feature / new module / fixing troubled code | Standard Analysis | 2 minutes | `change-dim-split` (standard) |
+| New project / major refactor / system breaks on every change | Full Analysis | 10-15 minutes | `change-dim-split` (full) |
 
-## 判断规则
+## Decision Rules
 
-1. **默认快扫。** 大多数时候脑子里闪一下就够。
-2. **跨边界升级。** 需求涉及的数据类型是否同时被前后端（或不同层）使用？如果是，至少标准分析。实验数据：base 环境因为没做这个判断，漏改了 22 个前端文件，产出不可部署。
-3. 如果快扫发现**变化速率不对齐的地方超过 3 个**，或者**涉及多个实体**，升级到标准分析。
-4. 如果标准分析发现**关系之间互相纠缠**，或者**系统已经耦合严重**，升级到完整分析。
-5. **不要跳过快扫直接做完整分析。** 过度分析和没有分析一样有害。
+1. **Default to Quick Scan.** A flash of thought is enough most of the time.
+2. **Upgrade on cross-boundary changes.** Does the requirement affect data types used across multiple layers or services? If yes, use at least Standard Analysis. Experiment data: the baseline environment missed 22 frontend files by skipping this check, producing undeployable output.
+3. If Quick Scan finds **more than 3 misaligned change rates** or **multiple entities involved**, upgrade to Standard Analysis.
+4. If Standard Analysis finds **intertangled relations** or **heavily coupled code**, upgrade to Full Analysis.
+5. **Don't skip Quick Scan and jump to Full Analysis.** Over-analysis is as harmful as no analysis.
 
-### 跨边界检测信号
+### Cross-Boundary Detection Signals
 
-以下任一条件成立，说明改动可能跨边界，至少需要标准分析：
+If any of these conditions hold, the change likely crosses boundaries — use at least Standard Analysis:
 
-- 要改的东西在系统中有多处副本（同名字段出现在多个模块/层/服务中）
-- 需求涉及"移除"某个属性（移除会波及所有引用点）
-- 需求涉及"类型变更"（可空性、枚举值变化，波及所有消费者）
-- 需求涉及跨实体的唯一性或查找逻辑
+- The thing you're changing has multiple copies in the system (same-named field appears across modules/layers/services)
+- The requirement involves "removing" an attribute (removal cascades to all reference points)
+- The requirement involves "type changes" (nullability, enum value changes — cascades to all consumers)
+- The requirement involves cross-entity uniqueness or lookup logic
 
-## Anti-Pattern
+## Anti-Patterns
 
-- **每次都做完整分析。** 浪费时间。80% 的场景快扫就够。
-- **跳过分析直接写代码。** "这个太简单了不用想" — 简单的地方才最容易埋雷。
-- **分析完不用。** 想完了该外化的地方不外化，等于没想。
-- **不查现有就新建。** 分析完直接新建接口/类，没检查现有代码是否已覆盖该变化速率。先查后建。
-- **无法 justify 的新建。** 每个拟新建的文件/接口/类必须回答"为什么现有的不行"。答不上来的不新建。
+- **Doing full analysis every time.** Wastes time. Quick scan covers 80% of cases.
+- **Skipping analysis entirely.** "This is too simple to think about" — simple places are where bugs hide best.
+- **Analyzing but not acting.** Identifying misaligned change rates but not externalizing is the same as not analyzing.
+- **Creating new things without checking existing code.** Before creating a new interface/class, check if existing code already covers that rate of change. Check first, build second.
+- **Unjustified new files.** Every proposed new file/interface/class must answer "why don't the existing ones work?" If you can't answer, don't create it.
 
-## 流程
+## Flow
 
 ```dot
 digraph using_dims {
-    "要写代码了" -> "快扫：这里什么会变？";
-    "快扫：这里什么会变？" -> "变化点 ≤ 3，单一实体" [label="简单"];
-    "快扫：这里什么会变？" -> "标准分析" [label="复杂"];
-    "变化点 ≤ 3，单一实体" -> "对齐的内化，不对齐的留口子";
-    "标准分析" -> "关系清晰，耦合可控" [label="OK"];
-    "标准分析" -> "完整分析" [label="升级"];
-    "关系清晰，耦合可控" -> "标注外化点，写代码";
-    "完整分析" -> "实体关系表 → 按速率分组 → 选外化手段 → 验证";
+    "About to code" -> "Quick Scan: what will change here?";
+    "Quick Scan: what will change here?" -> "≤3 change points, single entity" [label="simple"];
+    "Quick Scan: what will change here?" -> "Standard Analysis" [label="complex"];
+    "≤3 change points, single entity" -> "Internalize aligned, leave hooks for misaligned";
+    "Standard Analysis" -> "Relations clear, coupling manageable" [label="OK"];
+    "Standard Analysis" -> "Full Analysis" [label="escalate"];
+    "Relations clear, coupling manageable" -> "Mark externalization points, write code";
+    "Full Analysis" -> "Entity-relation table → group by rate → pick tools → verify";
 }
 ```
