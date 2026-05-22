@@ -1,4 +1,4 @@
-# 变维拆分 (Change-Dimensional Splitting)
+# DVA (Dimensional Variance Analysis / 变维拆分)
 
 ## 如果你是 AI Agent
 
@@ -43,15 +43,16 @@
 ## 项目结构
 
 ```
-dims/
-  CLAUDE.md             # 本文件
-  AGENTS.md             # 指向 CLAUDE.md
-  GEMINI.md             # Gemini 入口
-  skills/
-    using-dims/          # 入口 skill：判断用哪个深度
-    change-dim-scan/     # 快扫 skill：30 秒分析
-    change-dim-split/    # 标准 + 完整分析 skill
-  analyze-token-usage.py # session token 分析工具
+CLAUDE.md             # 本文件
+AGENTS.md             # 指向本文件
+GEMINI.md             # Gemini 入口
+docs/
+  DVA.md              # 英文文档（AI 翻译）
+变维拆分.md            # 中文文档（原文）
+skills/
+  using-dims/          # 入口 skill：判断用哪个深度
+  change-dim-scan/     # 快扫 skill：30 秒分析
+  change-dim-split/    # 标准 + 完整分析 skill
 ```
 
 ## 禁忌
