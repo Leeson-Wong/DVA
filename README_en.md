@@ -106,6 +106,29 @@ Detailed reports in [reports/](reports/).
 
 English documentation (`docs/DVA.md`) is AI-translated from the Chinese original (`README.md`). If you find translation errors, please [open an issue](../../issues).
 
+## Experiment Status & Limitations
+
+We have completed two rounds of controlled experiments (Shopizer + TEAMMATES) and a third round re-running TEAMMATES with English skills. Here is what we know and don't know:
+
+**Validated:**
+- Chinese DVA skills guide agents to more comprehensive change scopes (22 extra files in TEAMMATES were all necessary)
+- The "check existing before creating" step effectively prevents over-engineering
+- dims+superpowers combination is the most stable across both experiments
+
+**Not yet validated:**
+- English skill's cross-boundary detection signals need calibration (English dims missed R02 frontend changes; Chinese dims did not)
+- Results from a single model (GLM-5.1) cannot be generalized to other models
+- No independent code correctness scoring (only compilation verified)
+- Token usage data is unreliable (API doesn't expose sub-agent real usage)
+
+**Where we need help:**
+- Validation on more models (Claude Sonnet, GPT-4, Gemini, etc.)
+- Testing on more project types (microservices, monoliths, frontend-only, etc.)
+- English skill wording calibration
+- More rigorous experimental protocols (eliminate infrastructure noise, multi-run averaging)
+
+If you're doing software engineering research or evaluating AI-assisted programming methodologies, we'd love to collaborate. [Open an issue](../../issues) or reach out.
+
 ## License
 
 MIT
