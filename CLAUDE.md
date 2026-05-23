@@ -53,6 +53,8 @@ skills/
   using-dims/          # 入口 skill：判断用哪个深度
   change-dim-scan/     # 快扫 skill：30 秒分析
   change-dim-split/    # 标准 + 完整分析 skill
+.dims/                 # 运行时状态（gitignore）
+  history-marker       # git 历史分析标记，增量获取用
 ```
 
 ## 禁忌

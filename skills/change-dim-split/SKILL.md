@@ -48,6 +48,40 @@ Example — e-commerce order system:
 | Order | — syncs inventory → | Inventory system |
 | Order | — contains → | Order items |
 
+### Step 1.5: Git History Analysis (when git history is available)
+
+**Skip this step if:** not a git repo, or repo has fewer than 5 commits.
+
+**If a `.dims/history-marker` file exists** in the project root:
+1. Read the marker to find the last analyzed commit SHA
+2. Run `git log <last-sha>..HEAD --stat --format="%H %ai" -- <relevant paths>` to get only incremental changes
+3. Merge incremental data into the existing variance table
+4. Update the marker to current HEAD
+5. Combine git data with actual business judgment (git data is supplementary, not authoritative)
+
+**If no marker exists (first run):**
+1. Run `git log --stat --format="%H %ai" -n 100` to get recent history
+2. Parse output to build per-file/directory change metrics:
+   - **Commit frequency**: how often each file/directory is touched
+   - **Lines changed**: magnitude of changes per touch
+   - **Change intervals**: time between consecutive changes
+3. Map git metrics to DVA rate/trend categories:
+   - High frequency + short intervals → High / Oscillating
+   - Growing frequency → High / Growing
+   - Low frequency + long intervals → Low / Stable
+   - Medium frequency → Medium
+4. Write results to `.dims/history-marker`:
+   ```
+   # DVA History Analysis Marker
+   last_commit: <current HEAD SHA>
+   analyzed_at: <timestamp>
+   # Per-path summary (for reference, not authoritative)
+   # path/to/file.java: 23 commits in 90 days, avg 2.3 lines/change
+   ```
+5. Use this data to **inform** Step 2, not replace it — git history shows what changed, business judgment adds what will change
+
+**Git history is evidence, not verdict.** A file that hasn't changed in 6 months might be about to change a lot (new business requirement). Combine git data with domain knowledge.
+
 ### Step 2: Annotate Change Rates
 
 For each relation, annotate its change rate and trend:
