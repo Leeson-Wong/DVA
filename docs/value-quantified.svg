@@ -113,5 +113,5 @@
 
   <!-- Bottom note -->
   <line x1="20" y1="232" x2="700" y2="232" stroke="#e2e8f0" stroke-width="0.5"/>
-  <text font-size="9" fill="#94a3b8" x="360" y="248" text-anchor="middle">GLM-5.1 · Shopizer + TEAMMATES · 两轮对照 · dims+super 面积最大且最均匀</text>
+  <text font-size="9" fill="#94a3b8" x="360" y="248" text-anchor="middle">LLM 对照实验（GLM-5.1） · Shopizer + TEAMMATES · 两轮 · 需更多模型交叉验证</text>
 </svg>
