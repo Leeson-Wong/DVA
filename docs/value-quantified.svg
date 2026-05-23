@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 260" width="760" height="260">
+  <style>
+    text { font-family: -apple-system, "Segoe UI", sans-serif; }
+    .num { font-size: 32px; font-weight: 800; }
+    .unit { font-size: 14px; fill: #64748b; }
+    .desc { font-size: 12px; fill: #64748b; }
+    .title { font-size: 13px; fill: #475569; font-weight: 600; }
+  </style>
+
+  <!-- 4 metrics -->
+  <g transform="translate(30, 30)">
+    <text class="num" fill="#7c3aed">-39%</text>
+    <text class="desc" y="20">代码净增 vs superpowers</text>
+    <text class="unit" y="36">654 行 vs 1071 行</text>
+  </g>
+  <g transform="translate(210, 30)">
+    <text class="num" fill="#2563eb">+22</text>
+    <text class="desc" y="20">base 遗漏的必要文件</text>
+    <text class="unit" y="36">dims 全部找到</text>
+  </g>
+  <g transform="translate(390, 30)">
+    <text class="num" fill="#059669">83.6%</text>
+    <text class="desc" y="20">God Class 缩减</text>
+    <text class="unit" y="36">721 → 118 行</text>
+  </g>
+  <g transform="translate(570, 30)">
+    <text class="num" fill="#7c3aed">6.5x</text>
+    <text class="desc" y="20">测试用例 vs base</text>
+    <text class="unit" y="36">98 vs ~15</text>
+  </g>
+
+  <!-- Radar chart -->
+  <g transform="translate(180, 165)">
+    <text class="title" text-anchor="middle" y="-75">dims+super 综合表现最均衡</text>
+
+    <!-- Axes -->
+    <line x1="0" y1="0" x2="0" y2="-60" stroke="#e2e8f0" stroke-width="0.5"/>
+    <line x1="0" y1="0" x2="57" y2="-19" stroke="#e2e8f0" stroke-width="0.5"/>
+    <line x1="0" y1="0" x2="35" y2="49" stroke="#e2e8f0" stroke-width="0.5"/>
+    <line x1="0" y1="0" x2="-35" y2="49" stroke="#e2e8f0" stroke-width="0.5"/>
+    <line x1="0" y1="0" x2="-57" y2="-19" stroke="#e2e8f0" stroke-width="0.5"/>
+
+    <!-- Grid pentagons -->
+    <polygon points="0,-30 28.5,-9.5 17.5,24.5 -17.5,24.5 -28.5,-9.5" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+    <polygon points="0,-60 57,-19 35,49 -35,49 -57,-19" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+
+    <!-- Axis labels -->
+    <text font-size="9" fill="#64748b" text-anchor="middle" x="0" y="-64">改动完整性</text>
+    <text font-size="9" fill="#64748b" text-anchor="start" x="61" y="-17">代码精简</text>
+    <text font-size="9" fill="#64748b" text-anchor="start" x="39" y="58">测试覆盖</text>
+    <text font-size="9" fill="#64748b" text-anchor="end" x="-39" y="58">不过度设计</text>
+    <text font-size="9" fill="#64748b" text-anchor="end" x="-61" y="-17">主流程隔离</text>
+
+    <!-- base (gray) -->
+    <polygon points="0,-18 51,-9 5.25,7 -31.5,24.5 -51,-9" fill="#94a3b844" stroke="#94a3b8" stroke-width="1.2"/>
+
+    <!-- dims (blue) -->
+    <polygon points="0,-57 22.8,-7.6 2.6,7.4 -21,44.1 -54,-18" fill="#2563eb22" stroke="#2563eb" stroke-width="1.2"/>
+
+    <!-- superpowers (green) -->
+    <polygon points="0,-33 17.1,-5.7 33.25,46.6 -31.5,39.2 -39.9,-13.3" fill="#05966922" stroke="#059669" stroke-width="1.2"/>
+
+    <!-- dims+super (purple) -->
+    <polygon points="0,-51 42.75,-14.25 24.5,34.3 -29.75,41.7 -48.45,-16.15" fill="#7c3aed22" stroke="#7c3aed" stroke-width="1.8"/>
+
+    <!-- Legend -->
+    <g transform="translate(70, -20)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#94a3b8" stroke-width="1.5"/>
+      <text font-size="9" fill="#64748b" x="18" y="3">base</text>
+      <line x1="0" y1="14" x2="14" y2="14" stroke="#2563eb" stroke-width="1.5"/>
+      <text font-size="9" fill="#64748b" x="18" y="17">dims</text>
+      <line x1="0" y1="28" x2="14" y2="28" stroke="#059669" stroke-width="1.5"/>
+      <text font-size="9" fill="#64748b" x="18" y="31">superpowers</text>
+      <line x1="0" y1="42" x2="14" y2="42" stroke="#7c3aed" stroke-width="2"/>
+      <text font-size="9" fill="#0f172a" font-weight="600" x="18" y="45">dims+super</text>
+    </g>
+  </g>
+
+  <!-- Right side: key finding -->
+  <g transform="translate(460, 120)">
+    <text font-size="12" fill="#475569" font-weight="600">关键发现</text>
+    <text font-size="11" fill="#64748b" y="20">● dims 找到 base 遗漏的 22 个文件，全部必要</text>
+    <text font-size="11" fill="#64748b" y="38">● dims+super 用 39% 更少的代码完成同等功能</text>
+    <text font-size="11" fill="#64748b" y="56">● 新增支付方式时，dims 系主流程零修改</text>
+    <text font-size="11" fill="#64748b" y="74">● "查现有"步骤有效防止过度设计</text>
+    <text font-size="11" fill="#94a3b8" y="100">数据：GLM-5.1 · Shopizer + TEAMMATES · 两轮对照</text>
+  </g>
+</svg>

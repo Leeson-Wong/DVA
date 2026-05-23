@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>DVA 实验价值量化</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "Noto Sans SC", sans-serif; background: #f8fafc; padding: 40px; color: #0f172a; }
+  h1 { text-align: center; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 40px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .card h3 { font-size: 15px; color: #475569; margin-bottom: 16px; font-weight: 600; }
+  .card canvas { width: 100% !important; }
+  .full { grid-column: 1 / -1; }
+  .metric-row { display: flex; justify-content: center; gap: 48px; margin-bottom: 32px; flex-wrap: wrap; }
+  .metric { text-align: center; }
+  .metric .num { font-size: 36px; font-weight: 800; line-height: 1.1; }
+  .metric .label { font-size: 13px; color: #64748b; margin-top: 4px; }
+  .dim { color: #2563eb; }
+  .sup { color: #059669; }
+  .combo { color: #7c3aed; }
+  .base { color: #94a3b8; }
+  .note { text-align: center; color: #94a3b8; font-size: 12px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<h1>DVA 价值量化</h1>
+<p class="subtitle">两轮对照实验 · Shopizer + TEAMMATES · GLM-5.1 · 四环境对比</p>
+
+<div class="metric-row">
+  <div class="metric"><div class="num combo">39%</div><div class="label">代码净增量 vs superpowers<br><span style="color:#94a3b8">654 行 vs 1071 行</span></div></div>
+  <div class="metric"><div class="num dim">22</div><div class="label">base 遗漏的必要文件<br><span style="color:#94a3b8">TEAMMATES R02/R03/R05</span></div></div>
+  <div class="metric"><div class="num combo">83.6%</div><div class="label">God Class 缩减率<br><span style="color:#94a3b8">721 → 118 行</span></div></div>
+  <div class="metric"><div class="num combo">98</div><div class="label">测试用例数<br><span style="color:#94a3b8">base 仅 ~15 个</span></div></div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>改动范围：dims 找到 base 遗漏的文件（TEAMMATES）</h3>
+    <canvas id="chart1"></canvas>
+  </div>
+  <div class="card">
+    <h3>代码膨胀控制：dims+super 用更少的代码完成同等功能（Shopizer）</h3>
+    <canvas id="chart2"></canvas>
+  </div>
+  <div class="card">
+    <h3>God Class 拆解：ProductPriceUtils 721行→?行（Shopizer R03）</h3>
+    <canvas id="chart3"></canvas>
+  </div>
+  <div class="card">
+    <h3>改动扩散控制：R02 新增支付方式是否触动主流程（Shopizer）</h3>
+    <canvas id="chart4"></canvas>
+  </div>
+  <div class="card full">
+    <h3>综合表现雷达图（归一化，越大越好）</h3>
+    <canvas id="chart5" style="max-height:360px"></canvas>
+  </div>
+</div>
+
+<p class="note">数据来源：GLM-5.1 单模型 · Shopizer (commit 6a4a0a6) · TEAMMATES (commit 91086fa) · Token 统计不可靠，用工具调用数替代</p>
+
+<script>
+const colors = {
+  base: '#94a3b8',
+  dims: '#2563eb',
+  superpowers: '#059669',
+  combo: '#7c3aed'
+};
+const labels = ['base', 'dims', 'superpowers', 'dims+super'];
+const bgColors = [colors.base, colors.dims, colors.superpowers, colors.combo];
+
+// Chart 1: files changed TEAMMATES
+new Chart(document.getElementById('chart1'), {
+  type: 'bar',
+  data: {
+    labels: ['R01', 'R02', 'R03', 'R04', 'R05'],
+    datasets: [
+      { label: 'base', data: [2, 2, 19, 4, 7], backgroundColor: colors.base },
+      { label: 'dims', data: [2, 13, 37, 3, 46], backgroundColor: colors.dims },
+      { label: 'superpowers', data: [2, 4, 21, 5, 8], backgroundColor: colors.superpowers },
+      { label: 'dims+super', data: [2, 4, 17, 5, 8], backgroundColor: colors.combo },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+    scales: { y: { title: { display: true, text: '修改文件数' } } }
+  }
+});
+
+// Chart 2: code growth
+new Chart(document.getElementById('chart2'), {
+  type: 'bar',
+  data: {
+    labels: ['base', 'dims', 'superpowers', 'dims+super'],
+    datasets: [
+      { label: '净增行数', data: [391, 987, 1071, 654], backgroundColor: bgColors },
+      { label: '新增文件', data: [4, 15, 15, 8], backgroundColor: bgColors.map(c => c + '66') }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+    scales: { y: { title: { display: true, text: '数量' } } }
+  }
+});
+
+// Chart 3: PPU reduction
+new Chart(document.getElementById('chart3'), {
+  type: 'bar',
+  data: {
+    labels: ['base', 'dims', 'superpowers', 'dims+super'],
+    datasets: [{
+      label: '拆解后行数',
+      data: [148, 128, 128, 118],
+      backgroundColor: bgColors
+    }]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => `${ctx.raw} 行 (基线 721 行)` } }
+    },
+    scales: { x: { title: { display: true, text: '行数（越少越好）' }, min: 0 } }
+  }
+});
+
+// Chart 4: R02 modification spread
+new Chart(document.getElementById('chart4'), {
+  type: 'bar',
+  data: {
+    labels: ['base', 'dims', 'superpowers', 'dims+super'],
+    datasets: [
+      { label: '主流程修改', data: [1, 0, 0, 0], backgroundColor: '#ef4444' },
+      { label: '仅新增实现', data: [0, 1, 1, 1], backgroundColor: '#22c55e' }
+    ]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12 } },
+      tooltip: { callbacks: {
+        afterLabel: ctx => ctx.datasetIndex === 0 && ctx.dataIndex === 0
+          ? '需要修改 Resolver 适配新支付'
+          : ctx.datasetIndex === 0 ? '主流程零修改（Spring 自动注入）' : ''
+      }}
+    },
+    scales: { x: { display: false } }
+  }
+});
+
+// Chart 5: Radar
+new Chart(document.getElementById('chart5'), {
+  type: 'radar',
+  data: {
+    labels: ['改动范围完整性', '代码精简度', '测试覆盖', '主流程隔离', '不过度设计'],
+    datasets: [
+      { label: 'base', data: [30, 90, 10, 40, 90], borderColor: colors.base, backgroundColor: colors.base + '22', pointRadius: 3 },
+      { label: 'dims', data: [95, 40, 15, 95, 60], borderColor: colors.dims, backgroundColor: colors.dims + '22', pointRadius: 3 },
+      { label: 'superpowers', data: [55, 30, 95, 70, 50], borderColor: colors.superpowers, backgroundColor: colors.superpowers + '22', pointRadius: 3 },
+      { label: 'dims+super', data: [85, 75, 70, 90, 85], borderColor: colors.combo, backgroundColor: colors.combo + '22', pointRadius: 3 },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+    scales: { r: { min: 0, max: 100, ticks: { stepSize: 25 } } }
+  }
+});
+</script>
+</body>
+</html>
