@@ -1,5 +1,5 @@
 ---
-name: using-dims
+name: using-dva
 description: "DVA entry point. Pick analysis depth before coding: quick scan, standard, or full analysis."
 ---
 
@@ -54,7 +54,7 @@ If any of these conditions hold, the change likely crosses boundaries — use at
 ## Flow
 
 ```dot
-digraph using_dims {
+digraph using_dva {
     "About to code" -> "Quick Scan: what will change here?";
     "Quick Scan: what will change here?" -> "≤3 change points, single entity" [label="simple"];
     "Quick Scan: what will change here?" -> "Standard Analysis" [label="complex"];

@@ -46,7 +46,7 @@ Skills ready for Claude Code / Gemini:
 
 ```
 skills/
-  using-dims/SKILL.md        # Entry: pick the right depth
+  using-dva/SKILL.md         # Entry: pick the right depth
   change-dim-scan/SKILL.md   # Quick scan (30s)
   change-dim-split/SKILL.md  # Standard + Full analysis
 ```
@@ -97,7 +97,7 @@ Detailed reports in [reports/](reports/).
 ├── AGENTS.md              # Agents entry
 ├── GEMINI.md              # Gemini entry
 ├── skills/                # AI Agent skills
-│   ├── using-dims/
+│   ├── using-dva/
 │   ├── change-dim-scan/
 │   └── change-dim-split/
 └── reports/               # Experiment reports

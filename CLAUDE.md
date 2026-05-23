@@ -50,7 +50,7 @@ docs/
   DVA.md              # 英文文档（AI 翻译）
 变维拆分.md            # 中文文档（原文）
 skills/
-  using-dims/          # 入口 skill：判断用哪个深度
+  using-dva/           # 入口 skill：判断用哪个深度
   change-dim-scan/     # 快扫 skill：30 秒分析
   change-dim-split/    # 标准 + 完整分析 skill
 .dims/                 # 运行时状态（gitignore）

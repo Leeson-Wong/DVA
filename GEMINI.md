@@ -1,1 +1,1 @@
-@./skills/using-dims/SKILL.md
+@./skills/using-dva/SKILL.md
