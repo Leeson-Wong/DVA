@@ -1,141 +1,117 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" width="720" height="360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" width="720" height="260">
   <style>
     text { font-family: -apple-system, "Segoe UI", sans-serif; }
   </style>
 
   <!-- 4 top metrics -->
-  <g transform="translate(20, 30)">
-    <text font-size="28" font-weight="800" fill="#7c3aed">-39%</text>
-    <text font-size="11" fill="#64748b" y="16">代码净增 vs superpowers</text>
-    <text font-size="9" fill="#94a3b8" y="29">654 行 vs 1071 行</text>
+  <g transform="translate(20, 28)">
+    <text font-size="26" font-weight="800" fill="#7c3aed">-39%</text>
+    <text font-size="10" fill="#64748b" y="14">代码净增 vs superpowers</text>
+    <text font-size="9" fill="#94a3b8" y="26">654 行 vs 1071 行</text>
   </g>
-  <g transform="translate(195, 30)">
-    <text font-size="28" font-weight="800" fill="#2563eb">+22</text>
-    <text font-size="11" fill="#64748b" y="16">base 遗漏的必要文件</text>
-    <text font-size="9" fill="#94a3b8" y="29">dims 全部找到</text>
+  <g transform="translate(195, 28)">
+    <text font-size="26" font-weight="800" fill="#2563eb">+22</text>
+    <text font-size="10" fill="#64748b" y="14">base 遗漏的必要文件</text>
+    <text font-size="9" fill="#94a3b8" y="26">dims 全部找到</text>
   </g>
-  <g transform="translate(370, 30)">
-    <text font-size="28" font-weight="800" fill="#059669">83.6%</text>
-    <text font-size="11" fill="#64748b" y="16">God Class 缩减</text>
-    <text font-size="9" fill="#94a3b8" y="29">721 → 118 行</text>
+  <g transform="translate(370, 28)">
+    <text font-size="26" font-weight="800" fill="#059669">83.6%</text>
+    <text font-size="10" fill="#64748b" y="14">God Class 缩减</text>
+    <text font-size="9" fill="#94a3b8" y="26">721 → 118 行</text>
   </g>
-  <g transform="translate(555, 30)">
-    <text font-size="28" font-weight="800" fill="#7c3aed">6.5x</text>
-    <text font-size="11" fill="#64748b" y="16">测试用例 vs base</text>
-    <text font-size="9" fill="#94a3b8" y="29">98 vs ~15</text>
-  </g>
-
-  <line x1="20" y1="68" x2="700" y2="68" stroke="#e2e8f0" stroke-width="1"/>
-
-  <!-- Legend -->
-  <g transform="translate(190, 82)">
-    <rect width="10" height="10" rx="2" fill="#94a3b8"/>
-    <text font-size="10" fill="#64748b" x="14" y="9">base</text>
-    <rect x="60" width="10" height="10" rx="2" fill="#2563eb"/>
-    <text font-size="10" fill="#64748b" x="74" y="9">dims</text>
-    <rect x="130" width="10" height="10" rx="2" fill="#059669"/>
-    <text font-size="10" fill="#64748b" x="144" y="9">superpowers</text>
-    <rect x="240" width="10" height="10" rx="2" fill="#7c3aed"/>
-    <text font-size="10" fill="#0f172a" font-weight="600" x="254" y="9">dims+super</text>
+  <g transform="translate(555, 28)">
+    <text font-size="26" font-weight="800" fill="#7c3aed">6.5x</text>
+    <text font-size="10" fill="#64748b" y="14">测试用例 vs base</text>
+    <text font-size="9" fill="#94a3b8" y="26">98 vs ~15</text>
   </g>
 
-  <!-- 5 dimensions as grouped bars -->
-  <!-- max bar width = 400, each env gets 80px slot, 4 slots = 320px, centered in 400 -->
-  <!-- bar heights: scale 0-100 → 0-50px -->
+  <line x1="20" y1="60" x2="700" y2="60" stroke="#e2e8f0" stroke-width="1"/>
 
-  <!-- Row 1: 改动完整性 base:30 dims:95 super:55 combo:85 -->
-  <g transform="translate(20, 106)">
-    <text font-size="11" fill="#334155" font-weight="600" y="40">改动完整性</text>
-    <text font-size="9" fill="#94a3b8" y="52">找到所有受影响的代码</text>
-    <g transform="translate(140, 0)">
-      <rect x="0"  y="20" width="80" height="30" rx="3" fill="#94a3b8" opacity="0.25"/>
-      <rect x="0"  y="20" width="24" height="30" rx="3" fill="#94a3b8"/>
-      <text font-size="9" fill="#64748b" x="4" y="16">30</text>
+  <!-- Helper: 5-axis radar, radius=50, center at (0,0) -->
+  <!-- Axis angles (from top, clockwise): 0°, 72°, 144°, 216°, 288° -->
+  <!-- Axes at (cos(θ-90°)*r, sin(θ-90°)*r): -->
+  <!-- 0: (0, -50), 72: (47.55, -15.45), 144: (29.39, 40.45), 216: (-29.39, 40.45), 288: (-47.55, -15.45) -->
 
-      <rect x="85" y="20" width="80" height="30" rx="3" fill="#2563eb" opacity="0.25"/>
-      <rect x="85" y="20" width="76" height="30" rx="3" fill="#2563eb"/>
-      <text font-size="9" fill="#64748b" x="110" y="16">95</text>
-
-      <rect x="170" y="20" width="80" height="30" rx="3" fill="#059669" opacity="0.25"/>
-      <rect x="170" y="20" width="44" height="30" rx="3" fill="#059669"/>
-      <text font-size="9" fill="#64748b" x="190" y="16">55</text>
-
-      <rect x="255" y="20" width="80" height="30" rx="3" fill="#7c3aed" opacity="0.25"/>
-      <rect x="255" y="20" width="68" height="30" rx="3" fill="#7c3aed"/>
-      <text font-size="9" fill="#64748b" x="275" y="16">85</text>
-    </g>
+  <!-- base -->
+  <g transform="translate(90, 160)">
+    <text font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle" y="-62">base</text>
+    <!-- grid -->
+    <polygon points="0,-25 23.8,-7.7 14.7,20.2 -14.7,20.2 -23.8,-7.7" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <polygon points="0,-50 47.55,-15.45 29.39,40.45 -29.39,40.45 -47.55,-15.45" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <!-- axes -->
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <!-- data: 30, 90, 10, 40, 90 -->
+    <polygon points="0,-15 42.8,-13.9 2.94,4.05 -11.76,16.18 -42.8,-13.9" fill="#94a3b833" stroke="#94a3b8" stroke-width="1.5"/>
+    <!-- labels -->
+    <text font-size="7.5" fill="#64748b" text-anchor="middle" x="0" y="-53">完整性</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="50" y="-14">精简</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="32" y="49">测试</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-32" y="49">隔离</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-50" y="-14">克制</text>
   </g>
 
-  <!-- Row 2: 代码精简度 base:90 dims:40 super:30 combo:75 -->
-  <g transform="translate(20, 160)">
-    <text font-size="11" fill="#334155" font-weight="600" y="40">代码精简度</text>
-    <text font-size="9" fill="#94a3b8" y="52">用更少的代码完成功能</text>
-    <g transform="translate(140, 0)">
-      <rect x="0"  y="20" width="80" height="30" rx="3" fill="#94a3b8" opacity="0.25"/>
-      <rect x="0"  y="20" width="72" height="30" rx="3" fill="#94a3b8"/>
-      <text font-size="9" fill="#64748b" x="30" y="16">90</text>
-
-      <rect x="85" y="20" width="80" height="30" rx="3" fill="#2563eb" opacity="0.25"/>
-      <rect x="85" y="20" width="32" height="30" rx="3" fill="#2563eb"/>
-      <text font-size="9" fill="#64748b" x="95" y="16">40</text>
-
-      <rect x="170" y="20" width="80" height="30" rx="3" fill="#059669" opacity="0.25"/>
-      <rect x="170" y="20" width="24" height="30" rx="3" fill="#059669"/>
-      <text font-size="9" fill="#64748b" x="178" y="16">30</text>
-
-      <rect x="255" y="20" width="80" height="30" rx="3" fill="#7c3aed" opacity="0.25"/>
-      <rect x="255" y="20" width="60" height="30" rx="3" fill="#7c3aed"/>
-      <text font-size="9" fill="#64748b" x="275" y="16">75</text>
-    </g>
+  <!-- dims -->
+  <g transform="translate(270, 160)">
+    <text font-size="11" font-weight="700" fill="#2563eb" text-anchor="middle" y="-62">dims</text>
+    <polygon points="0,-25 23.8,-7.7 14.7,20.2 -14.7,20.2 -23.8,-7.7" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <polygon points="0,-50 47.55,-15.45 29.39,40.45 -29.39,40.45 -47.55,-15.45" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <!-- data: 95, 40, 15, 95, 60 -->
+    <polygon points="0,-47.5 19,-6.2 4.41,6.07 -27.92,38.43 -28.53,-9.27" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+    <text font-size="7.5" fill="#64748b" text-anchor="middle" x="0" y="-53">完整性</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="50" y="-14">精简</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="32" y="49">测试</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-32" y="49">隔离</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-50" y="-14">克制</text>
   </g>
 
-  <!-- Row 3: 测试覆盖 base:10 dims:15 super:95 combo:70 -->
-  <g transform="translate(20, 214)">
-    <text font-size="11" fill="#334155" font-weight="600" y="40">测试覆盖</text>
-    <text font-size="9" fill="#94a3b8" y="52">自动化测试保障功能正确</text>
-    <g transform="translate(140, 0)">
-      <rect x="0"  y="20" width="80" height="30" rx="3" fill="#94a3b8" opacity="0.25"/>
-      <rect x="0"  y="20" width="8" height="30" rx="3" fill="#94a3b8"/>
-      <text font-size="9" fill="#64748b" x="2" y="16">10</text>
-
-      <rect x="85" y="20" width="80" height="30" rx="3" fill="#2563eb" opacity="0.25"/>
-      <rect x="85" y="20" width="12" height="30" rx="3" fill="#2563eb"/>
-      <text font-size="9" fill="#64748b" x="88" y="16">15</text>
-
-      <rect x="170" y="20" width="80" height="30" rx="3" fill="#059669" opacity="0.25"/>
-      <rect x="170" y="20" width="76" height="30" rx="3" fill="#059669"/>
-      <text font-size="9" fill="#64748b" x="195" y="16">95</text>
-
-      <rect x="255" y="20" width="80" height="30" rx="3" fill="#7c3aed" opacity="0.25"/>
-      <rect x="255" y="20" width="56" height="30" rx="3" fill="#7c3aed"/>
-      <text font-size="9" fill="#64748b" x="272" y="16">70</text>
-    </g>
+  <!-- superpowers -->
+  <g transform="translate(450, 160)">
+    <text font-size="11" font-weight="700" fill="#059669" text-anchor="middle" y="-62">superpowers</text>
+    <polygon points="0,-25 23.8,-7.7 14.7,20.2 -14.7,20.2 -23.8,-7.7" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <polygon points="0,-50 47.55,-15.45 29.39,40.45 -29.39,40.45 -47.55,-15.45" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <!-- data: 55, 30, 95, 70, 50 -->
+    <polygon points="0,-27.5 14.3,-4.6 27.92,38.43 -20.57,28.32 -23.78,-7.73" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+    <text font-size="7.5" fill="#64748b" text-anchor="middle" x="0" y="-53">完整性</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="50" y="-14">精简</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="32" y="49">测试</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-32" y="49">隔离</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-50" y="-14">克制</text>
   </g>
 
-  <!-- Row 4: 主流程隔离 base:40 dims:95 super:70 combo:90 -->
-  <g transform="translate(20, 268)">
-    <text font-size="11" fill="#334155" font-weight="600" y="40">主流程隔离</text>
-    <text font-size="9" fill="#94a3b8" y="52">新需求不触碰核心流程</text>
-    <g transform="translate(140, 0)">
-      <rect x="0"  y="20" width="80" height="30" rx="3" fill="#94a3b8" opacity="0.25"/>
-      <rect x="0"  y="20" width="32" height="30" rx="3" fill="#94a3b8"/>
-      <text font-size="9" fill="#64748b" x="10" y="16">40</text>
-
-      <rect x="85" y="20" width="80" height="30" rx="3" fill="#2563eb" opacity="0.25"/>
-      <rect x="85" y="20" width="76" height="30" rx="3" fill="#2563eb"/>
-      <text font-size="9" fill="#64748b" x="110" y="16">95</text>
-
-      <rect x="170" y="20" width="80" height="30" rx="3" fill="#059669" opacity="0.25"/>
-      <rect x="170" y="20" width="56" height="30" rx="3" fill="#059669"/>
-      <text font-size="9" fill="#64748b" x="190" y="16">70</text>
-
-      <rect x="255" y="20" width="80" height="30" rx="3" fill="#7c3aed" opacity="0.25"/>
-      <rect x="255" y="20" width="72" height="30" rx="3" fill="#7c3aed"/>
-      <text font-size="9" fill="#64748b" x="280" y="16">90</text>
-    </g>
+  <!-- dims+super -->
+  <g transform="translate(630, 160)">
+    <text font-size="11" font-weight="800" fill="#7c3aed" text-anchor="middle" y="-62">dims+super</text>
+    <polygon points="0,-25 23.8,-7.7 14.7,20.2 -14.7,20.2 -23.8,-7.7" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <polygon points="0,-50 47.55,-15.45 29.39,40.45 -29.39,40.45 -47.55,-15.45" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-29.39" y2="40.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <line x1="0" y1="0" x2="-47.55" y2="-15.45" stroke="#e2e8f0" stroke-width="0.4"/>
+    <!-- data: 85, 75, 70, 90, 85 -->
+    <polygon points="0,-42.5 35.7,-11.6 20.57,28.32 -26.45,36.41 -40.42,-13.13" fill="#7c3aed33" stroke="#7c3aed" stroke-width="1.8"/>
+    <text font-size="7.5" fill="#64748b" text-anchor="middle" x="0" y="-53">完整性</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="50" y="-14">精简</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="start" x="32" y="49">测试</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-32" y="49">隔离</text>
+    <text font-size="7.5" fill="#64748b" text-anchor="end" x="-50" y="-14">克制</text>
   </g>
 
-  <!-- Key findings at bottom -->
-  <line x1="20" y1="336" x2="700" y2="336" stroke="#e2e8f0" stroke-width="1"/>
-  <text font-size="9" fill="#94a3b8" x="20" y="352">GLM-5.1 · Shopizer + TEAMMATES · 两轮对照 · dims+super 在 4/5 维度得分最高或次高</text>
+  <!-- Bottom note -->
+  <line x1="20" y1="232" x2="700" y2="232" stroke="#e2e8f0" stroke-width="0.5"/>
+  <text font-size="9" fill="#94a3b8" x="360" y="248" text-anchor="middle">GLM-5.1 · Shopizer + TEAMMATES · 两轮对照 · dims+super 面积最大且最均匀</text>
 </svg>
