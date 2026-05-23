@@ -52,4 +52,4 @@ Upgrade to `change-dim-split` (Standard Analysis) if Quick Scan reveals any of t
 - Multiple entities involved
 - Uncertainty about whether changes affect each other
 - The code being modified already has quality issues
-- **The thing you're changing has multiple copies in the system** (same-named field appears across modules/layers/services) — use at least Standard Analysis, otherwise you'll miss copies
+- **你正在改的东西在系统里有副本** — a field, type, or logic you're modifying appears in more than one place (backend AND frontend, multiple services, duplicated across layers). Search the codebase (`grep`, `find`) for all occurrences before proceeding. Missing copies produces broken builds. Use at least Standard Analysis.

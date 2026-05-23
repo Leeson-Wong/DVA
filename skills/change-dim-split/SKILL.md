@@ -36,7 +36,7 @@ The system is so tangled that changing one thing breaks three others, or it's a 
 
 ### Step 1: Identify Entities and Relations
 
-List all entities and their relationships in the system.
+List all entities and their relationships in the system. **For each entity and relation you identify, search the codebase for copies** — the same field, type, or logic may exist in multiple layers (backend/frontend, service/module, Java/TypeScript). Use `grep`, `find`, or equivalent to locate all occurrences before proceeding. Missing copies is the #1 cause of broken builds.
 
 Example — e-commerce order system:
 

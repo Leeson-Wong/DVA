@@ -38,10 +38,11 @@ Before writing code, answer one question: **should this logic live inside the en
 
 If any of these conditions hold, the change likely crosses boundaries — use at least Standard Analysis:
 
-- The thing you're changing has multiple copies in the system (same-named field appears across modules/layers/services)
-- The requirement involves "removing" an attribute (removal cascades to all reference points)
-- The requirement involves "type changes" (nullability, enum value changes — cascades to all consumers)
-- The requirement involves cross-entity uniqueness or lookup logic
+- **你正在改的东西在系统里有副本。** A field, type, or logic you're modifying appears in more than one place — backend AND frontend, multiple services, or duplicated across layers. Before changing it, search the codebase (`grep`, `find`) for all occurrences. Missing copies produces broken builds.
+- The requirement involves **removing** an attribute (removal cascades to every reference point — search for all usages first)
+- The requirement involves **type changes** (nullability, enum value changes — every consumer must be found and updated)
+- The requirement involves **cross-entity uniqueness or lookup logic** (a constraint that spans entities likely touches multiple modules)
+- The requirement involves **adding or modifying behavior on a type that is shared across layers** (e.g., a data class used in both backend Java and frontend TypeScript)
 
 ## Anti-Patterns
 
